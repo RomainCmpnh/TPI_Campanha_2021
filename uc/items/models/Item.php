@@ -105,6 +105,33 @@ class Item
         return $req->fetchAll();
     }
 
+    public static function SearchCount(?string $name): int {
+        $name = "%$name%";
+        $sql = "SELECT COUNT(*) FROM ecommerce 
+                WHERE name LIKE :name
+                OR item LIKE :name";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->bindParam(":name",$name,PDO::PARAM_STR);
+        $req->execute();
+        return $req->fetchColumn();
+    }
+
+    public static function SearchAllOffsetLimit(?string $name,int $offset, int $limit) : array {
+        $name = "%$name%";
+        $sql =  'SELECT idItem as idItem, name, description,price, manufacturer,partNumber, published, idCategory 
+                 FROM ecommerce
+                 WHERE name LIKE :name
+                 OR items LIKE :name
+                 LIMIT :offset, :limit';
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_OBJ);
+         $req->bindParam(':limit', $limit,PDO::PARAM_INT);
+         $req->bindParam(':offset', $offset,PDO::PARAM_INT);
+         $req->bindParam(":name",$name,PDO::PARAM_STR);
+         $req->execute();
+         return $req->fetchAll();
+     }
+
     // public static function insert(string $content, int $idSender): void
     // {
     //     $sql = "INSERT INTO messages (content, idSender) VALUES (:content, :idSender);";
