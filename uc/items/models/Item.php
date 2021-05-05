@@ -107,9 +107,9 @@ class Item
 
     public static function SearchCount(?string $name): int {
         $name = "%$name%";
-        $sql = "SELECT COUNT(*) FROM ecommerce 
+        $sql = "SELECT COUNT(*) FROM items
                 WHERE name LIKE :name
-                OR item LIKE :name";
+                OR name LIKE :name";
         $req = DbConnection::getInstance()->prepare($sql);
         $req->bindParam(":name",$name,PDO::PARAM_STR);
         $req->execute();
@@ -118,10 +118,10 @@ class Item
 
     public static function SearchAllOffsetLimit(?string $name,int $offset, int $limit) : array {
         $name = "%$name%";
-        $sql =  'SELECT idItem as idItem, name, description,price, manufacturer,partNumber, published, idCategory 
-                 FROM ecommerce
+        $sql =  'SELECT idItem, name, description,price, manufacturer,partNumber, published, idCategory 
+                 FROM items 
                  WHERE name LIKE :name
-                 OR items LIKE :name
+                 OR description LIKE :name
                  LIMIT :offset, :limit';
          $req = DbConnection::getInstance()->prepare($sql);
          $req->setFetchMode(PDO::FETCH_OBJ);

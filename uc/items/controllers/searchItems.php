@@ -1,6 +1,7 @@
 <?php
-require_once 'uc/model/Item.php';
 require_once 'commons/views/Html.php';
+require_once 'uc/items/models/Item.php';
+
 
 const PAGE_SIZE = 10;
 const ITEM_SEARCH_QUERY = "ItemSearchQuery";
@@ -13,35 +14,33 @@ if (empty($page)) {
 
 // Le mot à rechercher est récupéré en POST, et est sauvé dans la session
 // s'il n'existe pas, on le reprend depuis la session
-$word = filter_input(INPUT_POST,'word',FILTER_SANITIZE_STRING);
-if (is_null($word)){
-    $word = Session::get(ITEM_SEARCH_QUERY);
+$name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
+if (is_null($name)){
+    $name = Session::get(ITEM_SEARCH_QUERY);
 } else {
-    Session::set(ITEM_SEARCH_QUERY,$word);
+    Session::set(ITEM_SEARCH_QUERY,$name);
 }
 
 // Récupération du nombre total de résultat
 // Afin de calculer le nombre de pages à afficher
 // Création des données pour le navigateur de pages
-$count = Item::SearchCount($word);
+$count = Item::SearchCount($name);
 $pages = array();
 for ($i = 1; $i <= ceil($count / PAGE_SIZE); $i++) {
-    $pages[$i] = Routes::PathTo("dico", "searchDefinitions") . "&page=$i";
+    $pages[$i] = Routes::PathTo("items", "searchItems") . "&page=$i";
 }
 
 // Récupération des données de la page
-$definitions = Item::SearchAllOffsetLimit($word,PAGE_SIZE * ($page - 1), PAGE_SIZE);
-
-
+$items = Item::SearchAllOffsetLimit($name,PAGE_SIZE * ($page - 1), PAGE_SIZE);
 
 Html::showHtmlPage(
     'items',
-    "uc/items/views/showDefinitionsByPage.php",
+    "uc/items/views/showItemsByPage.php",
     array(
-        'definitions' => $definitions,
+        'items' => $items,
         'pages' => $pages,
         'page' => $page,
-        'word' => $word,
+        'name' => $name,
         'count' => $count
         )
 );

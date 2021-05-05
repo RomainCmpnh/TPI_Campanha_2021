@@ -25,4 +25,4 @@ if (is_int($id)) {
     }
 }
 
-header("Location:" . Routes::PathTo('messages', 'showMessages'));
+header("Location:" . Routes::PathTo('items', 'showItems'));
