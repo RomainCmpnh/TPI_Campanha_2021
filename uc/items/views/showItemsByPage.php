@@ -17,6 +17,7 @@
         <th>nom</th>
         <th>description</th>
         <th>prix</th>
+        <th>catégorie</th>
     </tr>
 
     <?php
@@ -37,13 +38,16 @@
             <td><?= $i->name; ?></td>
             <td><?= $i->description; ?></td>
             <td><?= $i->price ?></td>
+            <td><?php   $tableau[] = Item::getAllCategories();
+               echo $tableau[0][$i->idCategory];
+            ?></td>
       
             <td>
                 <?php if ($canEdit) : ?>
 
                     <a class="btn btn-primary" href="<?= Routes::PathTo('items', 'editItems') ?>&id=<?= $i->idItem ?>"><span class="fas fa-pen"></span></a>
 
-                    <button data-toggle="modal" class="btn btn-danger" href="#delete<?= $d->id ?>"><span class="fas fa-trash-alt"></span></button>
+                    <button data-toggle="modal" class="btn btn-danger" href="#delete"><span class="fas fa-trash-alt"></span></button>
                     <div class="modal" id="delete<?= $i->idItem ?>" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -58,6 +62,10 @@
                                         <?= $i->name; ?> :
                                         <?= $i->description; ?>
                                         <?= $i->price; ?>
+                                     <?php   $tableau[] = Item::getAllCategories();
+                                     echo $tableau[0][$i->idCategory];
+  
+                                        ?>
                                     </p>
                                 </div>
                                 <div class="modal-footer">

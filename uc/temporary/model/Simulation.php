@@ -78,6 +78,35 @@ class Simulation{
         return $result;
     }
 
+
+        /**
+     * getBreadCrumbsFor fournit un fil d'Ariane correspondant à la hiérarchie des catégories fournies en début de TPI
+     *
+     * @param  mixed $idCategory id de la catégorie pour la quelle on désire retrouver le chemin jusqu'à la racine.
+     * @return array tableau associatif (id=>nom de la catégorie)
+     */
+    public static function getAllCategories() : array {
+
+           return array(
+                1=>'Ordinateurs',
+                2=>'Composants',
+                3=>'Ordinateurs de bureau',
+                4=>'Ordinateurs portables',
+                5=>'Tablettes',
+                6=>'Processeurs',
+                7=>'Cartes mères',
+                8=>'Mémoire RAM',
+                9=>'Cartes graphiques',
+                10=>'Boîtiers',
+                11=>'Alimentations',
+                12=>'Refroidissement',
+                13=>'Stockage', 
+                14=>'SSD', 
+                15=>'Disques internes HDD', 
+                16=>'Clés USB', 
+                17=>'NAS', 
+                18=>'Lecteurs optiques DVD/BD');
+    }
         
     /**
      * getAllItems retourne la liste complète de tous les articles de la table items, avec le nom de la catégorie associée
