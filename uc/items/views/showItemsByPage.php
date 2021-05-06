@@ -9,6 +9,7 @@
 <div class="d-flex flex-row justify-content-between">
     <div class="my-2"><?= $count ?> Articles trouvées</div>
     <div><?= Html::PageNavigator($pages, $page) ?></div>
+   
 </div>
 
 <table class="table table-bordered table-striped table-condensed">
@@ -18,6 +19,7 @@
         <th>description</th>
         <th>prix</th>
         <th>catégorie</th>
+        <th>Détail</th>
     </tr>
 
     <?php
@@ -27,21 +29,28 @@
         // Le ProductManager ou le SaleManager peuvent éditer/supprimer leur propres définitions
         $canEdit = (Session::getUser()->hasCurrentRole(User::USER_ROLE_WEB_MANAGER));
         $c1 = Session::getUser()->hasCurrentRole(array(User::USER_ROLE_PRODUCT_MANAGER, User::USER_ROLE_SALE_MANAGER));
-        
+
 
         if ($c1) {
             $canEdit = true;
         }
     ?>
+    <form class="form-inline" action="<?= Routes::PathTo('items', 'detailItems') ?>" method="POST">
         <tr>
-            <td><?= $i->manufacturer ?></td>
+               <?php
+                  if($i->published == 1 || $c1) {
+                        ?> 
+            <td><input type="hidden" name="id" value="<?= $i->idItem?>" > <?= $i->manufacturer ?></td>
             <td><?= $i->name; ?></td>
             <td><?= $i->description; ?></td>
             <td><?= $i->price ?></td>
-            <td><?php   $tableau[] = Item::getAllCategories();
-               echo $tableau[0][$i->idCategory];
-            ?></td>
-      
+            <td><?php $tableau[] = Item::getAllCategories();
+                echo $tableau[0][$i->idCategory];
+                ?></td>
+            <?php } else {} ?>
+            
+            <td><button type="submit" class="btn btn-primary mb-2">Détail</button></td>
+            
             <td>
                 <?php if ($canEdit) : ?>
 
@@ -58,19 +67,25 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
+                                <?php
+                                if($i->published == 1 || $c1) {
+
+                                
+                                ?> 
                                     <p><?= $i->manufacturer; ?>
                                         <?= $i->name; ?> :
                                         <?= $i->description; ?>
                                         <?= $i->price; ?>
-                                     <?php   $tableau[] = Item::getAllCategories();
-                                     echo $tableau[0][$i->idCategory];
-  
+                                        <?php $tableau[] = Item::getAllCategories();
+                                        echo $tableau[0][$i->idCategory];
+
                                         ?>
                                     </p>
+                                    <?php  } else{}?>
                                 </div>
                                 <div class="modal-footer">
                                     <form action="<?= Routes::PathTo('items', 'deleteItem') ?>" method="post">
-                                        <input type="hidden" name="id" value="<?= $i->id ?>" />
+                                        <input type="hidden" name="id" value="<?= $i->idItem ?>" />
                                         <input class="btn" type="submit" name="submit" value="Supprimer" />
                                     </form>
                                 </div>
@@ -80,6 +95,6 @@
                 <?php endif; ?>
 
             </td>
-        </tr>
+        </tr></form>
     <?php endforeach; ?>
 </table>

@@ -44,9 +44,7 @@ $canDelete = (Session::getUser()->hasCurrentRole(User::USER_ROLE_WEB_MANAGER));
                                     <p><?= $i->name; ?>
                           
                                         <?= $i->price ?>
-                                        
-                                        
-                                        
+
                                     </p>
                                 </div>
                                 <div class="modal-footer">

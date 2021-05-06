@@ -109,7 +109,8 @@ class Item
         $name = "%$name%";
         $sql = "SELECT COUNT(*) FROM items
                 WHERE name LIKE :name
-                OR name LIKE :name";
+                OR description LIKE :name
+                OR manufacturer LIKE :name";
         $req = DbConnection::getInstance()->prepare($sql);
         $req->bindParam(":name",$name,PDO::PARAM_STR);
         $req->execute();
@@ -166,10 +167,10 @@ class Item
              11=>'Alimentations',
              12=>'Refroidissement',
              13=>'Stockage', 
-             14=>'SSD', 
-             15=>'Disques internes HDD', 
-             16=>'Clés USB', 
-             17=>'NAS', 
+             14=>'SSD',
+             15=>'Disques internes HDD',
+             16=>'Clés USB',
+             17=>'NAS',
              18=>'Lecteurs optiques DVD/BD');
  }
 
@@ -213,9 +214,9 @@ class Item
         $req->execute();
     }
 
-    public static function FindById(int $id): Item
+    public static function FindById($id): Item
     {
-        $sql = "SELECT idItem as idItem, name, description,price, manufacturer,partNumber, published, idCategory FROM items WHERE idItem= :id";
+        $sql = "SELECT idItem as idItem, name, description,price, manufacturer,partNumber, published, idCategory FROM items WHERE idItem= :idItem";
         $req = DbConnection::getInstance()->prepare($sql);
         $req->setFetchMode(PDO::FETCH_CLASS, 'Item');
         $req->bindParam(':idItem', $id, PDO::PARAM_INT);

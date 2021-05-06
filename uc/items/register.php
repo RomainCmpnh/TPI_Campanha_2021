@@ -4,6 +4,7 @@ if (!Session::getUser()->isAnonymous() && !Session::getUser()->hasCurrentRole(Us
 
     Routes::AddRoute("items", "showItems", "uc/items/controllers/showItems.php");
     Routes::AddRoute("items", "searchItems", "uc/items/controllers/searchItems.php");
+    Routes::AddRoute("items", "detailItems", "uc/items/controllers/detailItem.php");
     //Routes::AddRoute("items", "sendMessages", "uc/messages/controllers/sendMessages.php");
 
     $menuItems = new Menu("Items", null, true, Menu::MENU_MAIN_MENU_LEFT);

@@ -31,7 +31,7 @@ for ($i = 1; $i <= ceil($count / PAGE_SIZE); $i++) {
 }
 
 // Récupération des données de la page
-$items = Item::SearchAllOffsetLimit($name,PAGE_SIZE * ($page - 1), PAGE_SIZE);
+$items = Item::SearchAllOffsetLimit($name, PAGE_SIZE * ($page - 1), PAGE_SIZE);
 
 Html::showHtmlPage(
     'items',
