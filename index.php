@@ -21,6 +21,7 @@ Routes::addRoute('main', 'home', 'commons/controllers/home.php');
 require_once 'uc/user/register.php';
 require_once 'uc/temporary/register.php';
 require_once 'uc/items/register.php';
+require_once 'uc/panier/register.php';
 
 // récupération des paramètres de routage
 $action = filter_input(INPUT_GET, "action", FILTER_SANITIZE_URL);
