@@ -71,24 +71,18 @@ class commandItem
         return $req->fetchAll();
     }
 
-    //  public static function Add(Item $item) : ?int
-    //  {
-    //      $sql = "INSERT INTO items(name, description,price,manufacturer,partNumber,published,idCategory) 
-    //              VALUES(:name, :description, :price, :manufacturer , :partNumber , :published, :idCategory)";
-    //      $req = DbConnection::getInstance()->prepare($sql);
-    //      $req->bindParam(':name',$item->name,PDO::PARAM_STR);
-    //      $req->bindParam(':description',$item->description,PDO::PARAM_STR);
-    //      $req->bindParam(':price',$item->price,PDO::PARAM_INT);
-    //      $req->bindParam(':manufacturer',$item->manufacturer,PDO::PARAM_STR);
-    //      $req->bindParam(':partNumber',$item->partNumber,PDO::PARAM_STR);
-    //      $req->bindParam(':published',$item->published,PDO::PARAM_INT);
-    //      $req->bindParam(':idCategory',$item->idCategory,PDO::PARAM_INT);
-    //      if ($req->execute() == 1)
-    //          return DbConnection::getInstance()->lastInsertId();
-    //      else
-    //          return null;
-    //  }
-
+    public static function Add(commandItem $commandItem) : ?int
+    {
+        $sql = "INSERT INTO commands_has_items(idCommand,idItem,salePrice,quantity) 
+                VALUES(:idCommand, :idItem , :salePrice, :quantity)";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->bindParam(':idCommand',$commandItem->idCommand,PDO::PARAM_INT);
+        $req->bindParam(':idItem',$commandItem->idItem,PDO::PARAM_INT);
+        $req->bindParam(':salePrice',$commandItem->salePrice,PDO::PARAM_INT);
+        $req->bindParam(':quantity',$commandItem->quantity,PDO::PARAM_INT);
+        return $req->execute();
+ 
+    }
 
      
     

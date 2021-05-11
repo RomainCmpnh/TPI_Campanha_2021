@@ -4,7 +4,9 @@ require_once 'uc/items/models/Item.php';
 ?>
 <table class="table table-bordered table-striped table-condensed">
     <tr>
-        <th>Name Item</th>
+        <th>Nom de l'article</th>
+        <th>Marque</th>
+        <th>Numéro de série</th>
         <th>Prix</th>
         <th>Quantité à commander</th>
     </tr>
@@ -16,6 +18,8 @@ require_once 'uc/items/models/Item.php';
         <td><?php $Item = Item::FindById($i->idItem);
                 echo $Item->getName();
                 ?></td>
+                <td><?=$Item->getManufacturer();?></td>
+                <td><?=$Item->getPartNumber();?></td>
             <td><?= $i->salePrice ?></td>
             <td><?= $i->quantity; ?></td>
         </tr>

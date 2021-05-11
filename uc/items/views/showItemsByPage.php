@@ -56,9 +56,13 @@ require_once 'uc/temporary/model/Simulation.php';
            
             <?php } else {} ?>
             
-            <td><button type="submit" class="btn btn-primary mb-2">Détail</button></td>
-            <td><input type="number" name="quantity[<?= $i->partNumber?>]" value="0" /></td>   
+            <td><button type="submit" class="btn btn-primary mb-2">Détail</button></td>           
             </form>
+            <form class="form-inline" action="<?= Routes::PathTo('panier', 'addItem') ?>" method="POST">
+            <input type="hidden" name="id" value="<?= $i->idItem ?>" />
+            <td><input type="number" name="quantity" value="1" /></td>
+            <td><button type="submit" class="btn btn-primary mb-2">Ajouter au panier</button></td>
+            </form>   
             <td>
                 <?php if ($canEdit) : ?>
 
