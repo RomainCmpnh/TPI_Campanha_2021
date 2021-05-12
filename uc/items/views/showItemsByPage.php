@@ -1,5 +1,6 @@
 <?php 
 require_once 'uc/temporary/model/Simulation.php';
+
 ?>
 
 <form class="form-inline" action="<?= Routes::PathTo('items', 'searchItems') ?>" method="post">
@@ -25,6 +26,7 @@ require_once 'uc/temporary/model/Simulation.php';
         <th>catégorie</th>
         <th>Détail</th>
         <th>Quantité</th>
+        
     </tr>
 
     <?php
@@ -45,8 +47,8 @@ require_once 'uc/temporary/model/Simulation.php';
                <?php
                   if($i->published == 1 || $c1) {
                         ?> 
-            <td><input type="hidden" name="id" value="<?= $i->idItem?>" > <?= $i->manufacturer ?></td>
-            <td><?= $i->name; ?></td>
+            <td><input type="hidden" name="idCommand" value="0" ><?= $i->manufacturer ?></td>
+            <td><input type="hidden" name="id" value="<?= $i->idItem?>" ><?= $i->name; ?></td>
             <td><?= $i->description; ?></td>
             <td><?= $i->price ?></td>
            

@@ -2,7 +2,6 @@
 require_once 'commons/views/Html.php';
 require_once 'uc/items/models/Item.php';
 
-
 const PAGE_SIZE = 10;
 const ITEM_SEARCH_QUERY = "ItemSearchQuery";
 

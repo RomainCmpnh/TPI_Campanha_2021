@@ -84,7 +84,19 @@ class commandItem
  
     }
 
-     
+    public static function FindByItemId($id)
+    {
+        $sql = "SELECT idItem as idItem ,idCommand, salePrice, quantity  FROM commands_has_items WHERE idItem= :idItem";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->setFetchMode(PDO::FETCH_CLASS, 'commands_has_items');
+        $req->bindParam(':idItem', $id, PDO::PARAM_INT);
+        $req->execute();
+        $r = $req->fetch();
+        if ($r === false) {
+            $r = null;
+        }
+        return $r;
+    }
     
     //  public static function Delete(Item $item) : bool
     //  {

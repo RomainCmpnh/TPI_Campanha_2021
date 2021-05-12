@@ -8,7 +8,9 @@ if (Session::getUser()->hasCurrentRole(User::USER_ROLE_CUSTOMER)) {
     //Routes::AddRoute("items", "sendMessages", "uc/messages/controllers/sendMessages.php");
     Routes::AddRoute("panier", "showPanier", "uc/panier/controllers/showPanier.php");
     Routes::AddRoute("panier", "addItem", "uc/panier/controllers/addItem.php");
+    Routes::AddRoute("panier", "pdfPanier", "uc/panier/views/pdfPanier.php");
 
+    
     $menuItems = new Menu("Panier", null, true, Menu::MENU_MAIN_MENU_LEFT);
     $menuItems->AddItem(new Menu("Consulter le panier", Routes::PathTo("panier", "showPanier")));
 

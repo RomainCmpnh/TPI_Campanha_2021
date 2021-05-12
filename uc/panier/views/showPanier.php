@@ -9,6 +9,7 @@ require_once 'uc/items/models/Item.php';
         <th>Numéro de série</th>
         <th>Prix</th>
         <th>Quantité à commander</th>
+        <th>Finaliser ma commande</th>
     </tr>
 
     <?php
@@ -22,6 +23,10 @@ require_once 'uc/items/models/Item.php';
                 <td><?=$Item->getPartNumber();?></td>
             <td><?= $i->salePrice ?></td>
             <td><?= $i->quantity; ?></td>
+            <form class="form-inline" action="<?= Routes::PathTo('panier', 'pdfPanier') ?>" method="POST">
+            <input type="hidden" name="id" value="<?= $i->idItem ?>" />
+            <td><button type="submit" class="btn btn-primary mb-2">Finaliser ma commande</button></td>
+            </form>   
         </tr>
     <?php endforeach; ?>
 </table>

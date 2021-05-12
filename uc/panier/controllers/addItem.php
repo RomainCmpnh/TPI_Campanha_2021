@@ -1,8 +1,10 @@
 <?php
 require_once 'uc/items/models/Item.php';
-require_once 'uc/panier/models/command.php';
 require_once 'uc/panier/models/commandItem.php';
+require_once 'uc/command/model/command.php';
 require_once 'commons/views/Html.php';
+
+
 
 // seuls les clients peuvent accéder à ce contrôleur.
 if (!Session::getUser()->hasCurrentRole(User::USER_ROLE_CUSTOMER)) {
@@ -17,23 +19,32 @@ $errors = array();
 // récupérer les données du formulaire
 $id = filter_input(INPUT_POST,'id',FILTER_VALIDATE_INT);
 
+$idCommand = filter_input(INPUT_POST,'idCommand',FILTER_VALIDATE_INT);
+
 $quantity = filter_input(INPUT_POST, 'quantity', FILTER_VALIDATE_INT);
 
 $article = Item::findById($id); 
-
-$command = new command();
-$user = Session::getUser();
-$userId = $user->getIdUser();
-
 $nameArticle = $article->getName();
-$date = date("Y-m-d H:i:s");
-$command->setIdCommand($id);
-$command->setCommandStatus("Basket");
-$command->setCommandDate($date);
-$command->setIdUser($userId);
-$idCommand= $command->getIdCommand();
 
 $commandItem = new commandItem();
+
+while($commandItem->getIdCommand() == 0) {
+if($idCommand == 0){
+    $command = new command();
+    $user = Session::getUser();
+    $userId = $user->getIdUser();
+
+
+    $date = date("Y-m-d H:i:s");
+    $command->setCommandStatus("Basket");
+    $command->setCommandDate($date);
+    $command->setIdUser($userId);
+
+    $idCommand = command::add($command);
+
+}
+else{
+
 
 $commandItem->setIdCommand($idCommand);
 $commandItem->setIdItem($article->getIdItem());
@@ -44,7 +55,7 @@ $commandItem->setQuantity($quantity);
 // si au terme de la validation, aucune erreur n'a été détectée, alors on peut enregister les données
 if (empty($errors)){
 
-        $id = command::add($command);
+        
         $id = commandItem::add($commandItem);
     if (is_int($id)){
         FlashMessage::AddMessage(FlashMessage::FLASH_RANKING_SUCCESS,"l'article suivant a été enregistrée: <br>$nameArticle");
@@ -53,4 +64,6 @@ if (empty($errors)){
     }
     header("Location:".Routes::PathTo('items','searchItems'));
     exit;
+}
+}
 }

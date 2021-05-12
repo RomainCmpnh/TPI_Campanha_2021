@@ -13,8 +13,33 @@ class command
 
     protected $idUser;
 
+    protected $firstname;
+
+    protected $lastname;
+    
+
     public function __construct()
     {
+    }
+
+    public function getFistName(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstName($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastName($lastname)
+    {
+        $this->lastname = $lastname;
     }
 
     public function getIdCommand(): ?int
@@ -59,6 +84,36 @@ class command
     }
 
 
+
+    public static function getAllCustomer(User $user): array
+    {
+        $sql = 'SELECT idCommand, commandStatus, commandDate, commands.idUser 
+        FROM commands
+        INNER JOIN users
+        ON commands.idUser = users.idUser  
+        WHERE commands.idUser =:idUser AND commandStatus = "Sent" OR commandStatus = "Finalised" OR commandStatus = "PartiallyDelivered" ';
+        $req = DbConnection::getInstance()->prepare($sql);
+        $userId = $user->getIdUser();
+        $req->bindParam(':idUser',$userId,PDO::PARAM_INT);
+        $req->execute();
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        return $req->fetchAll();
+    }
+
+
+    public static function getAllManager(): array
+    {
+        $sql = 'SELECT idCommand, commandStatus, commandDate, commands.idUser, users.firstname , users.lastname 
+        FROM commands
+        INNER JOIN users
+        ON commands.idUser = users.idUser  
+        WHERE commandStatus = "Sent" OR commandStatus = "Finalised" OR commandStatus = "PartiallyDelivered"';
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->execute();
+        $req->setFetchMode(PDO::FETCH_OBJ);
+        return $req->fetchAll();
+    }
+
     public static function Add(command $command) : ?int
      {
          $sql = "INSERT INTO commands(commandStatus,commandDate,idUser) 
@@ -73,6 +128,28 @@ class command
              return null;
      }
 
+     public static function Delete(command $command) : bool
+     {
+         $sql = "DELETE FROM commands WHERE idCommand = :idCommand";
+         $req = DbConnection::getInstance()->prepare($sql);
+         $idCommand = $command->getIdCommand();
+         $req->bindParam(':idCommand',$idCommand,PDO::PARAM_INT);
+         return $req->execute();
+     }
+
+     public static function FindById($id): bool
+     {
+         $sql = "SELECT idCommand as idCommand, commandStatus, commandDate, idUser FROM commands WHERE idCommand= :idCommand";
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_CLASS, 'Command');
+         $req->bindParam(':idCommand', $id, PDO::PARAM_INT);
+         $req->execute();
+         $r = $req->fetch();
+         if ($r === false) {
+             $r = null;
+         }
+         return $r;
+     }
     // public static function getAll(User $user): array
     // {
     //     $sql = 'SELECT commands_has_items.idCommand, idItem, salePrice, quantity 
