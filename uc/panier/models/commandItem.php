@@ -84,6 +84,18 @@ class commandItem
  
     }
 
+    public static function Delete(commandItem $commandItem) : bool
+     {
+         $sql = "DELETE commands_has_items 
+         FROM commands_has_items 
+         INNER JOIN commands 
+         ON commands_has_items.idCommand = commands.idCommand 
+         WHERE commands_has_items.idCommand = :idCommand AND commands.idCommand = :idCommand";
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->bindParam(':idCommand',$commandItem->getIdCommand(),PDO::PARAM_INT);
+         return $req->execute();
+     }
+
     public static function FindByItemId($id)
     {
         $sql = "SELECT idItem as idItem ,idCommand, salePrice, quantity  FROM commands_has_items WHERE idItem= :idItem";
@@ -96,6 +108,47 @@ class commandItem
             $r = null;
         }
         return $r;
+    }
+    public static function FindByCommandAndItemId($idCommand,$idItem )
+    {
+        $sql = "SELECT idItem ,idCommand, salePrice, quantity  FROM commands_has_items WHERE idCommand= :idCommand AND idItem = :idItem";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->setFetchMode(PDO::FETCH_CLASS, 'commands_has_items');
+        $req->bindParam(':idCommand', $idCommand, PDO::PARAM_INT);
+        $req->bindParam(':idItem',$idItem,PDO::PARAM_INT);
+        $req->execute();
+        $r = $req->fetch();
+        if ($r === false) {
+            $r = null;
+        }
+        return $r;
+    }
+
+    public static function FindByCommandId($idCommand)
+    {
+        $sql = "SELECT idItem ,idCommand, salePrice, quantity  FROM commands_has_items WHERE idCommand= :idCommand";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->setFetchMode(PDO::FETCH_CLASS, 'commands_has_items');
+        $req->bindParam(':idCommand', $idCommand, PDO::PARAM_INT);
+        $req->execute();
+        $r = $req->fetch();
+        if ($r === false) {
+            $r = null;
+        }
+        return $r;
+    }
+
+    public static function CountTotal(User $user): int {
+        
+        $sql = "SELECT SUM(salePrice * quantity) FROM commands_has_items
+                INNER JOIN commands
+                ON commands_has_items.idCommand = commands.idCommand
+                WHERE commandStatus = 'Basket' AND idUser =:idUser";
+        $userId = $user->getIdUser();
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->bindParam(':idUser',$userId,PDO::PARAM_INT);
+        $req->execute();
+        return $req->fetchColumn();
     }
     
     //  public static function Delete(Item $item) : bool

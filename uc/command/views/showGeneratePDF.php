@@ -1,3 +1,13 @@
+<?php 
+$user = Session::getUser();
+require_once 'uc/command/model/command.php';
+require_once 'uc/items/models/item.php';
+require_once 'uc/panier/models/commandItem.php';
+
+$idCommand = $_SESSION['idCommand'];
+
+$command = command::FindById($idCommand);
+?>
 <style type="text/css">
 <!--
 table { vertical-align: top; }
@@ -12,7 +22,7 @@ td    { vertical-align: top; }
             <td style="width: 75%;">
             </td>
             <td style="width: 25%; color: #444444;">
-                <img style="width: 100%;" src="./res/logo.gif" alt="Logo"><br>
+               
                 RELATION CLIENT
             </td>
         </tr>
@@ -23,26 +33,20 @@ td    { vertical-align: top; }
         <tr>
             <td style="width:50%;"></td>
             <td style="width:14%; ">Client :</td>
-            <td style="width:36%">M. Albert Dupont</td>
+            <td style="width:36%"> <?= $user->getFirstName()  . " " . $user->getLastName() ?></td>
         </tr>
         <tr>
             <td style="width:50%;"></td>
             <td style="width:14%; ">Adresse :</td>
             <td style="width:36%">
-                Résidence perdue<br>
-                1, rue sans nom<br>
-                00 000 - Pas de Ville<br>
+                <?= $user->getAddress() ?><br>
+                
             </td>
         </tr>
         <tr>
             <td style="width:50%;"></td>
             <td style="width:14%; ">Email :</td>
-            <td style="width:36%">nomail@domain.com</td>
-        </tr>
-        <tr>
-            <td style="width:50%;"></td>
-            <td style="width:14%; ">Tel :</td>
-            <td style="width:36%">33 (0) 1 00 00 00 00</td>
+            <td style="width:36%"><?= $user->getEmail() ?></td>
         </tr>
     </table>
     <br>
@@ -55,16 +59,14 @@ td    { vertical-align: top; }
     </table>
     <br>
     <i>
-        <b><u>Objet </u>: &laquo; Bon de Retour &raquo;</b><br>
-        Compte client : 00C4520100A<br>
-        Référence du Dossier : 71326<br>
+    
     </i>
     <br>
     <br>
     Madame, Monsieur, Cher Client,<br>
     <br>
     <br>
-    Nous souhaitons vous informer que le dossier <b>71326</b> concernant un &laquo; Bon de Retour &raquo; pour les articles suivants a été accepté.<br>
+    Voici votre commande
     <br>
     <table cellspacing="0" style="width: 100%; border: solid 1px black; background: #F7F7F7; font-size: 10pt;">
         <colgroup>

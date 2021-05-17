@@ -6,35 +6,35 @@
             <?php if (!empty($errors['name'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= $errors['name'] ?></div>
             <?php endif; ?>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Saisir le nom de l'article" value="<?= $itemSelect->getName() ?>">
+            <input type="text" require="true" class="form-control" id="name" name="name" placeholder="Saisir le nom de l'article" value="<?= $itemSelect->getName() ?>">
         </div>
         <div class="form-group">
             <label for="description">description</label>
             <?php if (!empty($errors['description'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= $errors['description'] ?></div>
             <?php endif; ?>
-            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Saisir la description"><?= $itemSelect->getDescription() ?></textarea>
+            <textarea class="form-control"  id="description" name="description" rows="3" placeholder="Saisir la description"><?= $itemSelect->getDescription() ?></textarea>
         </div>
         <div class="form-group">
             <label for="price">price</label>
             <?php if (!empty($errors['price'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= $errors['price'] ?></div>
             <?php endif; ?>
-            <textarea class="form-control" id="price" name="price" rows="3" placeholder="Saisir le prix"><?= $itemSelect->getPrice() ?></textarea>
+            <textarea class="form-control" require="true" id="price" name="price" rows="3" placeholder="Saisir le prix"><?= $itemSelect->getPrice() ?></textarea>
         </div>
         <div class="form-group">
             <label for="Manufacturer">manufacturer</label>
             <?php if (!empty($errors['manufacturer'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= $errors['manufacturer'] ?></div>
             <?php endif; ?>
-            <textarea class="form-control" id="manufacturer" name="manufacturer" rows="3" placeholder="Saisir le fabricant"><?= $itemSelect->getManufacturer() ?></textarea>
+            <textarea class="form-control" require="true" id="manufacturer" name="manufacturer" rows="3" placeholder="Saisir le fabricant"><?= $itemSelect->getManufacturer() ?></textarea>
         </div>
         <div class="form-group">
             <label for="SerialNumber">serial number</label>
             <?php if (!empty($errors['serialNumber'])) : ?>
                 <div class="alert alert-danger" role="alert"><?= $errors['serialNumber'] ?></div>
             <?php endif; ?>
-            <textarea class="form-control" id="serialNumber" name="serialNumber" rows="3" placeholder="Saisir le numéro de série"><?= $itemSelect->getPartNumber() ?></textarea>
+            <textarea class="form-control" id="serialNumber" require="true" name="serialNumber" rows="3" placeholder="Saisir le numéro de série"><?= $itemSelect->getPartNumber() ?></textarea>
         </div>
         <div class="form-group">
             <label for="published">published</label>

@@ -113,9 +113,13 @@ class Item
     public static function SearchCount(?string $name): int {
         $name = "%$name%";
         $sql = "SELECT COUNT(*) FROM items
+                INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
                 WHERE name LIKE :name
-                OR description LIKE :name
-                OR manufacturer LIKE :name";
+                OR items.description LIKE :name
+                OR manufacturer LIKE :name
+                OR title LIKE :name
+                ";
         $req = DbConnection::getInstance()->prepare($sql);
         $req->bindParam(":name",$name,PDO::PARAM_STR);
         $req->execute();
@@ -125,11 +129,14 @@ class Item
 
     public static function SearchAllOffsetLimit(?string $name,int $offset, int $limit) : array {
         $name = "%$name%";
-        $sql =  'SELECT idItem, name, description,price, manufacturer,partNumber, published, idCategory 
+        $sql =  'SELECT idItem, name, items.description,price, manufacturer,partNumber, published, items.idCategory
                  FROM items
+                 INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
                  WHERE name LIKE :name
-                 OR description LIKE :name
+                 OR items.description LIKE :name
                  OR manufacturer LIKE :name
+                 OR title LIKE :name
                  LIMIT :offset, :limit';
          $req = DbConnection::getInstance()->prepare($sql);
          $req->setFetchMode(PDO::FETCH_OBJ);
@@ -140,6 +147,91 @@ class Item
          return $req->fetchAll();
      }
 
+     public static function SearchAllOffsetLimitOrderByName(?string $name,int $offset, int $limit) : array {
+        $name = "%$name%";
+        $sql =  'SELECT idItem, name, items.description,price, manufacturer,partNumber, published, items.idCategory
+                 FROM items
+                 INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
+                 WHERE name LIKE :name
+                 OR items.description LIKE :name
+                 OR manufacturer LIKE :name
+                 OR title LIKE :name
+                 ORDER BY items.name
+                 LIMIT :offset, :limit';
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_OBJ);
+         $req->bindParam(':limit', $limit,PDO::PARAM_INT);
+         $req->bindParam(':offset', $offset,PDO::PARAM_INT);
+         $req->bindParam(":name",$name,PDO::PARAM_STR);
+         $req->execute();
+         return $req->fetchAll();
+     }
+
+     public static function SearchAllOffsetLimitOrderByDescendingNumber(?string $name,int $offset, int $limit) : array {
+        $name = "%$name%";
+        $sql =  'SELECT idItem, name, items.description,price, manufacturer,partNumber, published, items.idCategory
+                 FROM items
+                 INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
+                 WHERE name LIKE :name
+                 OR items.description LIKE :name
+                 OR manufacturer LIKE :name
+                 OR title LIKE :name
+                 ORDER BY items.price DESC
+                 LIMIT :offset, :limit';
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_OBJ);
+         $req->bindParam(':limit', $limit,PDO::PARAM_INT);
+         $req->bindParam(':offset', $offset,PDO::PARAM_INT);
+         $req->bindParam(":name",$name,PDO::PARAM_STR);
+         $req->execute();
+         return $req->fetchAll();
+     }
+
+     public static function SearchAllOffsetLimitOrderByAscendingNumber(?string $name,int $offset, int $limit) : array {
+        $name = "%$name%";
+        $sql =  'SELECT idItem, name, items.description,price, manufacturer,partNumber, published, items.idCategory
+                 FROM items
+                 INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
+                 WHERE name LIKE :name
+                 OR items.description LIKE :name
+                 OR manufacturer LIKE :name
+                 OR title LIKE :name
+                 ORDER BY items.price ASC
+                 LIMIT :offset, :limit';
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_OBJ);
+         $req->bindParam(':limit', $limit,PDO::PARAM_INT);
+         $req->bindParam(':offset', $offset,PDO::PARAM_INT);
+         $req->bindParam(":name",$name,PDO::PARAM_STR);
+         $req->execute();
+         return $req->fetchAll();
+     }
+
+     public static function SearchAllOffsetLimitNoPublished(?string $name,int $offset, int $limit) : array {
+        $name = "%$name%";
+        $sql =  'SELECT idItem, name, items.description,price, manufacturer,partNumber, published, items.idCategory
+                 FROM items
+                 INNER JOIN categories
+                 ON items.idCategory = categories.idCategory
+                 WHERE items.published = 0 AND 
+                 name LIKE :name
+                 OR items.description LIKE :name
+                 OR manufacturer LIKE :name
+                 OR title LIKE :name
+                 
+                 LIMIT :offset, :limit';
+         $req = DbConnection::getInstance()->prepare($sql);
+         $req->setFetchMode(PDO::FETCH_OBJ);
+         $req->bindParam(':limit', $limit,PDO::PARAM_INT);
+         $req->bindParam(':offset', $offset,PDO::PARAM_INT);
+         $req->bindParam(":name",$name,PDO::PARAM_STR);
+         $req->execute();
+         return $req->fetchAll();
+     }
+     
      public static function Add(Item $item) : ?int
      {
          $sql = "INSERT INTO items(name, description,price,manufacturer,partNumber,published,idCategory) 

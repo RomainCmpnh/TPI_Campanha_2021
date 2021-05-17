@@ -90,8 +90,10 @@ class command
         $sql = 'SELECT idCommand, commandStatus, commandDate, commands.idUser 
         FROM commands
         INNER JOIN users
-        ON commands.idUser = users.idUser  
-        WHERE commands.idUser =:idUser AND commandStatus = "Sent" OR commandStatus = "Finalised" OR commandStatus = "PartiallyDelivered" ';
+        ON commands.idUser = users.idUser
+        WHERE commands.idUser =:idUser AND commandStatus = "Sent" OR commandStatus = "Finalised" OR commandStatus = "PartiallyDelivered" 
+        ORDER BY commandDate DESC
+        ';
         $req = DbConnection::getInstance()->prepare($sql);
         $userId = $user->getIdUser();
         $req->bindParam(':idUser',$userId,PDO::PARAM_INT);
@@ -128,6 +130,21 @@ class command
              return null;
      }
 
+
+     public static function UpdateCommandPdfPath(int $idCommand, string $path): int
+    {   
+        $sql = "UPDATE commands SET
+        pdfPath = :path
+        WHERE idCommand = :idCommand";
+        $req = DbConnection::getInstance()->prepare($sql);
+        $req->bindParam(':idCommand', $idCommand, PDO::PARAM_INT);
+        $req->bindParam(':path', $path, PDO::PARAM_STR);
+        if ($req->execute() == 1)
+            return $req->execute();
+        else
+            return null;
+    }
+
      public static function Delete(command $command) : bool
      {
          $sql = "DELETE FROM commands WHERE idCommand = :idCommand";
@@ -137,9 +154,39 @@ class command
          return $req->execute();
      }
 
-     public static function FindById($id): bool
+     public static function DeleteBarket(command $command) : bool
      {
-         $sql = "SELECT idCommand as idCommand, commandStatus, commandDate, idUser FROM commands WHERE idCommand= :idCommand";
+         $sql = "DELETE commands_has_items 
+         FROM commands_has_items 
+         INNER JOIN commands 
+         ON commands_has_items.idCommand = commands.idCommand 
+         WHERE commands_has_items.idCommand = :idCommand AND commands.idCommand = :idCommand";
+         $req = DbConnection::getInstance()->prepare($sql);
+         $idCommand = $command->getIdCommand();
+         $req->bindParam(':idCommand',$idCommand,PDO::PARAM_INT);
+         return $req->execute();
+     }
+
+     public static function DeleteAllBarket(User $user) : bool
+     {
+         $sql = "DELETE commands_has_items , commands
+         FROM commands_has_items 
+         INNER JOIN commands 
+         ON commands_has_items.idCommand = commands.idCommand
+         INNER JOIN users
+         ON commands.idUser = users.idUser  
+         WHERE commands.idUser =:idUser
+         ";
+         $req = DbConnection::getInstance()->prepare($sql);
+         $userId = $user->getIdUser();
+         $req->bindParam(':idUser',$userId,PDO::PARAM_INT);
+         return $req->execute();
+     }
+     public static function FindById($id): command
+     {
+         $sql = "SELECT idCommand as idCommand, commandStatus, commandDate, idUser 
+         FROM commands 
+         WHERE idCommand= :idCommand";
          $req = DbConnection::getInstance()->prepare($sql);
          $req->setFetchMode(PDO::FETCH_CLASS, 'Command');
          $req->bindParam(':idCommand', $id, PDO::PARAM_INT);

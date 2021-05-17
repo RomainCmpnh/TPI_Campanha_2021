@@ -78,7 +78,7 @@ $article->setIdCategory($IdCategorie);
 
 // si au terme de la validation, aucune erreur n'a été détectée, alors on peut enregister les données
 if (empty($errors)){
-    if ($id===null) {
+    if ($id==null) {
         $id = Item::add($article);
     } else {
         $id = Item::update($article);

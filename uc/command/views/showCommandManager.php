@@ -14,9 +14,13 @@ require_once 'uc/command/model/command.php';
     foreach ($commands as $i) :
         $canEdit = false;
         $today = date("Y-m-d H:i:s");
-        if($today < strtotime('-90 days') && $i->commandStatus == "Sent" || $i->commandStatus == "PartiallyDelivered" || $i->commandStatus == "Finalised") {
+        if($today > strtotime('-90 days') && $i->commandStatus == "Sent" || $i->commandStatus == "PartiallyDelivered" || $i->commandStatus == "Finalised") {
            $canEdit = true;
         }
+
+      
+
+        
     ?>
         <tr>
             <td><?= $i->commandStatus; ?></td>
@@ -24,7 +28,7 @@ require_once 'uc/command/model/command.php';
             <td><?= $i->firstname ?></td>
             <td><?= $i->lastname ?></td>
             <td>
-            <?php if ($canEdit) : ?>
+            <?php  if ($canEdit) : ?>
 
 <button data-toggle="modal" class="btn btn-danger" href="#delete<?= $i->idCommand ?>"><span class="fas fa-trash-alt"></span></button>
 <div class="modal" id="delete<?= $i->idCommand ?>" tabindex="-1">

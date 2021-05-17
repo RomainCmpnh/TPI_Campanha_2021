@@ -19,6 +19,7 @@ if (is_null($name)){
 } else {
     Session::set(ITEM_SEARCH_QUERY,$name);
 }
+
 $publishedON = 1;
 // Récupération du nombre total de résultat
 // Afin de calculer le nombre de pages à afficher
@@ -30,7 +31,7 @@ for ($i = 1; $i <= ceil($count / PAGE_SIZE); $i++) {
 }
 
 // Récupération des données de la page
-$items = Item::SearchAllOffsetLimit($name, PAGE_SIZE * ($page - 1), PAGE_SIZE);
+$items = Item::SearchAllOffsetLimitOrderByName($name, PAGE_SIZE * ($page - 1), PAGE_SIZE);
 
 Html::showHtmlPage(
     'items',

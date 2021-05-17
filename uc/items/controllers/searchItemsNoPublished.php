@@ -19,18 +19,18 @@ if (is_null($name)){
 } else {
     Session::set(ITEM_SEARCH_QUERY,$name);
 }
-$publishedON = 1;
+$publishedON = 0;
 // Récupération du nombre total de résultat
 // Afin de calculer le nombre de pages à afficher
 // Création des données pour le navigateur de pages
 $count = Item::SearchCount($name);
 $pages = array();
 for ($i = 1; $i <= ceil($count / PAGE_SIZE); $i++) {
-    $pages[$i] = Routes::PathTo("items", "searchItems") . "&page=$i";
+    $pages[$i] = Routes::PathTo("items", "searchItemsNoPublished") . "&page=$i";
 }
 
 // Récupération des données de la page
-$items = Item::SearchAllOffsetLimit($name, PAGE_SIZE * ($page - 1), PAGE_SIZE);
+$items = Item::SearchAllOffsetLimitNoPublished($name, PAGE_SIZE * ($page - 1), PAGE_SIZE);
 
 Html::showHtmlPage(
     'items',
